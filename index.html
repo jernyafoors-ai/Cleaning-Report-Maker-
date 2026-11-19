@@ -22,7 +22,7 @@ h1{font-size:20px;margin:4px 0 2px}
 .info{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .info label{display:block;font-size:12.5px;color:var(--mut)}
 .info label.wide{grid-column:1/-1}
-input[type=text],input[type=date]{width:100%;padding:8px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink);font:inherit}
+input[type=text],input[type=date],select{width:100%;padding:8px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink);font:inherit}
 .hd{display:flex;gap:8px;align-items:flex-start;justify-content:space-between;margin-bottom:10px}
 h2{font-size:14.5px;margin:0;line-height:1.35}
 .del{flex:none;background:transparent;border:1px solid var(--line);color:var(--bad);border-radius:6px;padding:4px 9px;font:inherit;font-size:12.5px;cursor:pointer}
@@ -36,9 +36,9 @@ h2{font-size:14.5px;margin:0;line-height:1.35}
 .zone[data-s="0"] .tag{color:var(--b)}.zone[data-s="1"] .tag{color:var(--d)}.zone[data-s="2"] .tag{color:var(--a)}
 .hint{color:var(--mut);font-size:12px;flex:1;display:flex;align-items:center;text-align:center;justify-content:center}
 .zone.full .hint{display:none}
-.thumbs{display:grid;gap:6px}
+.thumbs{display:grid;gap:6px;grid-template-columns:repeat(auto-fill,minmax(88px,1fr))}
 .th{position:relative}
-.th img{width:100%;display:block;border-radius:5px}
+.th img{width:100%;aspect-ratio:1;object-fit:cover;display:block;border-radius:5px}
 .th button{position:absolute;top:3px;right:3px;width:24px;height:24px;border-radius:50%;border:0;background:rgba(0,0,0,.65);color:#fff;font-size:16px;line-height:1;cursor:pointer}
 .btns{display:flex;flex-direction:column;gap:4px}
 .zone.max .btns{display:none}
@@ -55,8 +55,8 @@ button:focus-visible,input:focus-visible,.zone:focus-visible{outline:3px solid v
 #toast{position:fixed;left:50%;transform:translateX(-50%);bottom:100px;background:var(--ink);color:var(--bg);padding:9px 14px;border-radius:8px;font-size:13.5px;max-width:90%;display:none;z-index:6}
 #paper{max-width:640px;margin:0 auto}
 .pg{container-type:inline-size;position:relative;background:#fff;color:#000;aspect-ratio:11906/16838;margin-bottom:14px;box-shadow:0 2px 10px rgba(0,0,0,.25);overflow:hidden;font-family:Arial,Helvetica,sans-serif}
-.hd,.bd{position:absolute}
-.hd{border:1px solid #000}
+.phd,.pbd{position:absolute}
+.phd{border:1px solid #000}
 .hr{display:grid;grid-template-columns:minmax(0,2400fr) minmax(0,5700fr) minmax(0,2400fr)}
 .hc{border-right:1px solid #000;display:flex;align-items:center;justify-content:center;text-align:center;overflow:hidden}
 .hc:last-child{border-right:0}
@@ -78,6 +78,19 @@ button:focus-visible,input:focus-visible,.zone:focus-visible{outline:3px solid v
 .nm2{flex:1;min-width:0;font-weight:700;font-size:14.5px}
 .note{color:var(--mut);font-size:12.5px;margin:0 0 10px}
 .hide{display:none}
+@media (min-width:700px){main{max-width:960px}#paper{max-width:720px}}
+@media (min-width:1000px){
+ body{font-size:16px}
+ main{max-width:1280px;padding:16px 22px}
+ .tabs{max-width:420px;margin-left:auto;margin-right:auto}
+ #edit:not(.hide){display:grid;grid-template-columns:minmax(320px,400px) minmax(0,1fr);gap:0 18px;align-items:start}
+ #edit>.sub{grid-column:1/-1}
+ #edit>.info{grid-column:1;grid-row:2}
+ #edit>.addcard{grid-column:1;grid-row:3}
+ #edit>#sections{grid-column:2;grid-row:2 / span 2}
+ #paper{max-width:780px}
+ .zone{min-height:150px}
+}
 </style>
 </head>
 <body>
@@ -101,10 +114,11 @@ button:focus-visible,input:focus-visible,.zone:focus-visible{outline:3px solid v
       <label class="wide">Sub line (optional)<input type="text" id="sub" placeholder="e.g. TFM32-Charter School - AUH"></label>
       <label class="wide">Activities bar<input type="text" id="bar" value="Deep Cleaning Activities"></label>
       <label class="wide" style="display:flex;gap:8px;align-items:center;color:var(--ink)"><input type="checkbox" id="yr" style="width:auto">Date me saal (year) bhi dikhao</label>
+      <label class="wide">Photo style<select id="pf"><option value="fit">Poori photo dikhao (cut nahi hogi)</option><option value="fill">Cell me bharo (thodi cut hogi)</option></select></label>
       <div class="lgrow"><span>Logos</span><button class="add" id="lgL" type="button">Left logo badlo</button><img id="thL" alt=""><button class="add" id="lgR" type="button">Right logo badlo</button><img id="thR" alt=""><button class="ghost" id="lgReset" type="button" style="padding:6px 10px">Original</button></div>
     </div>
     <div id="sections"></div>
-    <div class="card">
+    <div class="card addcard">
       <h2 style="margin-bottom:8px">Add a new activity</h2>
       <div class="newact">
         <input type="text" id="newname" placeholder="e.g. Staff Room Cleaning" maxlength="120">
@@ -120,7 +134,7 @@ button:focus-visible,input:focus-visible,.zone:focus-visible{outline:3px solid v
 </main>
 <div class="bar">
   <span id="count">0 photos</span>
-  <button class="ghost" id="reset">Clear photos</button>
+  <button class="ghost" id="reset">New report</button>
   <button class="go" id="dl" disabled>Word (.docx)</button>
   <button class="go alt" id="dlp" disabled>PDF</button>
 </div>
@@ -156,12 +170,12 @@ function armed(btn,label,run,needsConfirm){
   };
 }
 
-function addActivity(name){
+function addActivity(name,saved){
   const act={id:++uid,name,p:[[],[],[]],zones:[]};
   acts.push(act);
   const card=document.createElement("section");card.className="card";
   const hd=document.createElement("div");hd.className="hd";
-  const h=document.createElement("input");h.type="text";h.className="nm2";h.value=name;h.setAttribute("aria-label","Activity name");h.oninput=()=>{act.name=h.value};
+  const h=document.createElement("input");h.type="text";h.className="nm2";h.value=name;h.setAttribute("aria-label","Activity name");h.oninput=()=>{act.name=h.value;schedSave()};
   const del=document.createElement("button");del.type="button";del.className="del";del.textContent="Delete";
   armed(del,"Delete",()=>{
     acts.splice(acts.indexOf(act),1);card.remove();
@@ -190,8 +204,9 @@ function addActivity(name){
     act.zones[s]=z;row.append(z);
   });
   card.append(row);$("#sections").append(card);
+  if(saved){act.p=saved;for(let s=0;s<3;s++)paint(act,s)}
 }
-START.forEach(addActivity);
+START.forEach(n=>addActivity(n));
 
 $("#addact").onclick=()=>{
   const i=$("#newname"),v=i.value.trim();
@@ -243,9 +258,9 @@ function paint(act,s){
   z.classList.toggle("max",act.p[s].length>=MAXP);
   z.querySelector(".ct").textContent=act.p[s].length+"/"+MAXP;
 }
-function count(){const n=total();$("#count").textContent=n+(n===1?" photo":" photos");$("#dl").disabled=$("#dlp").disabled=n===0}
-armed($("#reset"),"Clear photos",()=>{acts.forEach(a=>a.p.forEach((_,s)=>{a.p[s]=[];paint(a,s)}));count()},()=>total()>0);
-window.addEventListener("beforeunload",e=>{if(total()){e.preventDefault();e.returnValue=""}});
+function count(){const n=total();$("#count").textContent=n+(n===1?" photo":" photos");$("#dl").disabled=$("#dlp").disabled=n===0;schedSave()}
+armed($("#reset"),"New report",()=>{acts.forEach(a=>a.p.forEach((_,s)=>{a.p[s]=[];paint(a,s)}));["school","fc","d1","d2"].forEach(i=>$("#"+i).value="");count();toast("Naya report shuru ✓")},()=>total()>0||$("#school").value||$("#fc").value);
+
 
 const fmt=v=>v?new Date(v+"T00:00").toLocaleDateString("en-GB",{day:"numeric",month:"short",year:"numeric"}):"";
 function bytes(url){const b=atob(url.split(",")[1]),u=new Uint8Array(b.length);for(let i=0;i<b.length;i++)u[i]=b.charCodeAt(i);return u}
@@ -285,7 +300,14 @@ async function fillOf(ph){
   c.getContext("2d").drawImage(im,(ph.w-sw)/2,(ph.h-sh)/2,sw,sh,0,0,FW,FH);
   ph.f={url:c.toDataURL("image/jpeg",.82)};
 }
-const prep=()=>Promise.all(acts.flatMap(a=>a.p.flat()).map(fillOf));
+async function fitOf(ph){
+  if(ph.g)return;
+  const im=new Image();im.src=ph.url;await im.decode();
+  const k=Math.min(FW/ph.w,FH/ph.h,1),w=Math.round(ph.w*k),h=Math.round(ph.h*k),c=document.createElement("canvas");c.width=w;c.height=h;
+  c.getContext("2d").drawImage(im,0,0,w,h);ph.g={url:c.toDataURL("image/jpeg",.82),w,h};
+}
+const isFit=()=>$("#pf").value==="fit";
+const prep=()=>Promise.all(acts.flatMap(a=>a.p.flat()).map(p=>isFit()?fitOf(p):fillOf(p)));
 
 /* ---------- tabs + preview ---------- */
 function show(tab){
@@ -302,11 +324,11 @@ function lg(g){const i=new Image();i.src=g.url;i.alt="";const z=fitLogo(g);i.sty
 function renderPreview(){
   const root=$("#paper");root.innerHTML="";const L=pageList(),I=info();
   L.forEach((pg,i)=>{
-    const p=bx("pg"),h=bx("hd",{top:q(805),left:q(MX),width:q(PW)}),r1=bx("hr",{height:q(1389)});
+    const p=bx("pg"),h=bx("phd",{top:q(805),left:q(MX),width:q(PW)}),r1=bx("hr",{height:q(1389)});
     const a=bx("hc"),b=bx("hc",{fontSize:pt(11),color:"#404040"},"WORK COMPLETION REPORT"),c=bx("hc");
     a.append(lg(logoL));c.append(lg(logoR));r1.append(a,b,c);
     h.append(r1,bx("hr2",{height:q(606)}));p.append(h);
-    const bd=bx("bd",{top:q(3300),left:q(MX),width:q(PW)});
+    const bd=bx("pbd",{top:q(3300),left:q(MX),width:q(PW)});
     if(pg.c){
       const cv=bx("cv",{height:q(11143),paddingTop:q(1230)});
       const ln=(t,sz,mb,x)=>cv.append(bx("",Object.assign({fontSize:pt(sz),marginBottom:q(mb),lineHeight:1.13},x||{}),t));
@@ -324,7 +346,7 @@ function renderPreview(){
       tb.append(bx("c",{gridRow:"2 / span 3",fontSize:pt(9),fontWeight:700,padding:q(60)},nameOf(pg.a)));
       for(let r=0;r<3;r++)STAGES.forEach((_,s)=>{
         const cell=bx("c"),ph=pg.a.p[s][pg.k*3+r];
-        if(ph){const im=new Image();im.src=ph.url;im.alt="";cell.append(im)}
+        if(ph){const im=new Image();im.src=ph.url;im.alt="";im.style.objectFit=isFit()?"contain":"cover";cell.append(im)}
         tb.append(cell);
       });
       bd.append(tb);
@@ -371,7 +393,7 @@ async function build(){
       const cs=r===0?[cell(COLS[0],[para(nameOf(pg.a),18,{b:1})],{rs:3})]:[];
       STAGES.forEach((_,s)=>{
         const ph=pg.a.p[s][pg.k*3+r];let k=[new D.Paragraph({children:[]})];
-        if(ph)k=[new D.Paragraph({alignment:C,spacing:{before:0,after:0},children:[img(ph.f.url,"jpg",190,203)]})];
+        if(ph){let u,w=190,h=203;if(isFit()){const g=ph.g,kk=Math.min(190/g.w,203/g.h);u=g.url;w=Math.round(g.w*kk);h=Math.round(g.h*kk)}else u=ph.f.url;k=[new D.Paragraph({alignment:C,spacing:{before:0,after:0},children:[img(u,"jpg",w,h)]})]}
         cs.push(cell(COLS[s+1],k,{m:{top:0,bottom:0,left:0,right:0}}));
       });
       rows.push(row(RH,cs));
@@ -440,7 +462,7 @@ async function buildPdf(){
       x=X+cols[0];
       for(let s=0;s<3;s++){
         const cw=cols[s+1],im=pg.a.p[s][pg.k*3+r];
-        if(im)doc.addImage(im.f.url,"JPEG",x,y,cw,rh);
+        if(im){if(isFit()){const g=im.g,k=Math.min((cw-.6)/g.w,(rh-.6)/g.h),iw=g.w*k,ih=g.h*k;doc.addImage(g.url,"JPEG",x+(cw-iw)/2,y+(rh-ih)/2,iw,ih)}else doc.addImage(im.f.url,"JPEG",x,y,cw,rh)}
         rect(x,y,cw,rh,0,.4);x+=cw;
       }
       y+=rh;
@@ -463,6 +485,37 @@ async function download(kind,btn){
 }
 $("#dl").onclick=()=>download("docx",$("#dl"));
 $("#dlp").onclick=()=>download("pdf",$("#dlp"));
+
+/* ---------- auto-save on this device (IndexedDB) ---------- */
+let restored=false,saveT=null,warned=false;
+const idb=()=>new Promise((res,rej)=>{const r=indexedDB.open("deep-clean-report",1);r.onupgradeneeded=()=>r.result.createObjectStore("kv");r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error)});
+async function dbPut(k,v){const d=await idb();return new Promise((res,rej)=>{const t=d.transaction("kv","readwrite");t.objectStore("kv").put(v,k);t.oncomplete=()=>res();t.onerror=()=>rej(t.error)})}
+async function dbGet(k){const d=await idb();return new Promise((res,rej)=>{const r=d.transaction("kv").objectStore("kv").get(k);r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error)})}
+const FIELDS=["school","fc","d1","d2","ttl","reg","sub","bar","pf"];
+function snapshot(){
+  const f={};FIELDS.forEach(i=>f[i]=$("#"+i).value);f.yr=$("#yr").checked;
+  return {f,logoL,logoR,acts:acts.map(a=>({name:a.name,p:a.p.map(s=>s.map(x=>({url:x.url,w:x.w,h:x.h})))}))};
+}
+function schedSave(){
+  if(!restored)return;clearTimeout(saveT);
+  saveT=setTimeout(async()=>{try{await dbPut("state",snapshot())}catch(e){if(!warned){warned=true;toast("Auto-save nahi ho paya (storage full ya blocked).")}}},700);
+}
+document.addEventListener("input",schedSave);document.addEventListener("change",schedSave);
+(async()=>{
+  try{navigator.storage&&navigator.storage.persist&&navigator.storage.persist()}catch(e){}
+  try{
+    const st=await dbGet("state");
+    if(st&&st.acts&&st.acts.length){
+      acts.length=0;active=null;$("#sections").innerHTML="";
+      st.acts.forEach(a=>addActivity(a.name,a.p));
+      FIELDS.forEach(i=>{if(st.f&&st.f[i]!=null)$("#"+i).value=st.f[i]});$("#yr").checked=!!(st.f&&st.f.yr);
+      if(st.logoL)logoL=st.logoL;if(st.logoR)logoR=st.logoR;setTh();
+      count();
+      if(total())toast("Pichla kaam wapas aa gaya ✓");
+    }
+  }catch(e){}
+  restored=true;
+})();
 </script>
 </body>
 </html>
