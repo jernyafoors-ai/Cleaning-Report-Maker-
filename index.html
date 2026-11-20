@@ -9,12 +9,14 @@
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1a1c;--card:#172427;--ink:#e6eff0;--mut:#98acb0;--line:#35505a;--acc:#3fb6c0;--accink:#06262a;--b:#e0a458;--d:#6fb2ec;--a:#58c585;--hl:#1b3a3e;--bad:#f08a82;color-scheme:dark}}
 :root[data-theme="dark"]{--bg:#0f1a1c;--card:#172427;--ink:#e6eff0;--mut:#98acb0;--line:#35505a;--acc:#3fb6c0;--accink:#06262a;--b:#e0a458;--d:#6fb2ec;--a:#58c585;--hl:#1b3a3e;--bad:#f08a82;color-scheme:dark}
 *{box-sizing:border-box}
+html,body{max-width:100%;overflow-x:hidden}
 body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 "Segoe UI",system-ui,-apple-system,Roboto,sans-serif}
 button,input,select{font:inherit}
 .top{position:fixed;top:0;left:0;right:0;height:calc(54px + env(safe-area-inset-top,0px));padding:env(safe-area-inset-top,0px) 12px 0 8px;background:var(--card);border-bottom:1px solid var(--line);display:flex;align-items:center;gap:8px;z-index:20}
 .ham{width:42px;height:42px;border:0;background:transparent;color:var(--ink);font-size:24px;cursor:pointer;border-radius:8px}
-.tbt{flex:1;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-#sync{font-size:12.5px;color:var(--mut);white-space:nowrap}
+.top{overflow:hidden}
+.tbt{flex:1;min-width:0;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#sync{flex:none;font-size:12.5px;color:var(--mut);white-space:nowrap;background:transparent;border:0;padding:8px 4px;cursor:pointer}
 .drawer{position:fixed;top:0;bottom:0;left:0;width:280px;max-width:84vw;background:var(--card);border-right:1px solid var(--line);z-index:30;transform:translateX(-100%);transition:transform .2s;padding:calc(12px + env(safe-area-inset-top,0px)) 10px calc(20px + env(safe-area-inset-bottom,0px));overflow:auto}
 .drawer.open{transform:none}
 .scrim{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:25;display:none}
@@ -42,19 +44,19 @@ button:focus-visible,input:focus-visible,select:focus-visible,.zone:focus-visibl
 .ghost{background:transparent;border:1px solid var(--line);color:var(--ink);border-radius:8px;padding:8px 12px;cursor:pointer}
 .ghost.bad{color:var(--bad)}
 .rowb{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(240px,100%),1fr));gap:12px}
 .sc{display:block;text-align:left;width:100%;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px;color:var(--ink);cursor:pointer}
 .sc b{display:block;font-size:15px}.sc span{color:var(--mut);font-size:13px}
 .sc:hover{border-color:var(--acc)}
-.row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-.zone{border:2px dashed var(--line);border-radius:8px;padding:6px;min-height:120px;display:flex;flex-direction:column;gap:6px;transition:background .15s,border-color .15s}
+.row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.zone{min-width:0;border:2px dashed var(--line);border-radius:8px;padding:5px;min-height:120px;display:flex;flex-direction:column;gap:6px;transition:background .15s,border-color .15s}
 .zone.over{background:var(--hl);border-color:var(--acc)}.zone.active{border-color:var(--acc)}.zone.full{border-style:solid}
 .tag{font-weight:700;font-size:13px;display:flex;justify-content:space-between;gap:4px}
 .ct{font-weight:400;color:var(--mut);font-size:12px}
 .zone[data-s="0"] .tag{color:var(--b)}.zone[data-s="1"] .tag{color:var(--d)}.zone[data-s="2"] .tag{color:var(--a)}
 .hint{color:var(--mut);font-size:12px;flex:1;display:flex;align-items:center;text-align:center;justify-content:center}
 .zone.full .hint{display:none}
-.thumbs{display:grid;gap:6px;grid-template-columns:repeat(auto-fill,minmax(88px,1fr))}
+.thumbs{display:grid;gap:6px;grid-template-columns:repeat(auto-fill,minmax(72px,1fr))}
 .th{position:relative}
 .th img{width:100%;aspect-ratio:1;object-fit:cover;display:block;border-radius:5px;background:var(--line)}
 .th.ld img{min-height:60px}.th.bad img{opacity:.3}
@@ -63,7 +65,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,.zone:focus-visibl
 .pend{position:absolute;left:4px;bottom:4px;font-size:13px;background:rgba(0,0,0,.6);border-radius:8px;padding:0 4px}
 .btns{display:flex;flex-direction:column;gap:4px}
 .zone.max .btns{display:none}
-.add{border:1px solid var(--acc);background:transparent;color:var(--acc);border-radius:6px;padding:6px;font-size:13px;cursor:pointer}
+.add{border:1px solid var(--acc);background:transparent;color:var(--acc);border-radius:6px;padding:7px 2px;font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:pointer}
 .arow{display:flex;gap:6px;align-items:center;margin-bottom:8px}
 .arow input{flex:1;margin:0}
 .arow button{padding:7px 10px}
@@ -101,7 +103,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,.zone:focus-visibl
 </style>
 </head>
 <body class="out">
-<header class="top"><button class="ham" id="ham" aria-label="Menu">☰</button><div class="tbt" id="tbt">Deep Cleaning Reports</div><div id="sync"></div></header>
+<header class="top"><button class="ham" id="ham" aria-label="Menu">☰</button><div class="tbt" id="tbt">Deep Cleaning Reports</div><button id="sync" type="button" aria-label="Sync status"></button></header>
 <aside class="drawer" id="drawer"></aside><div class="scrim" id="scrim"></div>
 <main><div class="wrap">
 
@@ -175,7 +177,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,.zone:focus-visibl
 /* ================= basics ================= */
 const STAGES=["Before","During","After"],SK=["b","d","a"],MAXP=9;
 const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
-const toast=m=>{const t=$("#toast");t.textContent=m;t.style.display="block";clearTimeout(toast.h);toast.h=setTimeout(()=>t.style.display="none",3800)};
+const toast=(m,ms)=>{const t=$("#toast");t.textContent=m;t.style.display="block";clearTimeout(toast.h);toast.h=setTimeout(()=>t.style.display="none",ms||3800)};
 const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,6);
 const el=(tag,props,...kids)=>{const e=document.createElement(tag);if(props)Object.assign(e,props);kids.flat().forEach(k=>k!=null&&e.append(k));return e};
 const START=["Rooftop Cleaning / Drainage Points Cleaning / Weeds Removal","Washing & Disinfecting Bins","Toilets and Hygiene Area Cleaning","External Area Cleaning / Play Areas","Internal Floor Cleaning / Classrooms","Labs / Clinical Area / Canteen Area","Meeting Rooms / Administration Area / Reception Area / Conference Hall","Final Touches / Checking"];
@@ -198,17 +200,21 @@ const urlMem=new Map();
 const fbu=p=>CFG.fb.replace(/\/+$/,"")+"/"+p+".json";
 async function fb(method,path,body){
   const r=await fetch(fbu(path),{method,headers:body!==undefined?{"Content-Type":"application/json"}:undefined,body:body!==undefined?JSON.stringify(body):undefined});
-  if(!r.ok)throw new Error("Database error "+r.status);return r.json();
+  if(!r.ok)throw new Error("Database error "+r.status);
+  if(method!=="GET")bump(path);
+  return r.json();
 }
+const bumpT={};
+function bump(path){const m=path.match(/^schools\/([^\/]+)(\/.*)?$/);if(!m||m[2]==="/ver")return;clearTimeout(bumpT[m[1]]);bumpT[m[1]]=setTimeout(()=>fetch(fbu("schools/"+m[1]+"/ver"),{method:"PUT",body:String(Date.now())}).catch(()=>{}),300)}
 const dbGetR=p=>fb("GET",p),dbPutR=(p,v)=>fb("PUT",p,v),dbPatchR=(p,v)=>fb("PATCH",p,v),dbDelR=p=>fb("DELETE",p);
-async function sc(payload){
-  const r=await fetch(CFG.sc,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify({key:CFG.key,...payload})});
-  const j=await r.json();if(!j.ok)throw new Error(j.error||"Script error");return j;
+async function scCall(url,opt){
+  let r;try{r=await fetch(url,opt)}catch(e){throw new Error("Script tak pahunch nahi paya. Script URL (/exec wala) aur Deploy me 'Who has access = Anyone' check karo.")}
+  const t=await r.text();let j;try{j=JSON.parse(t)}catch(e){throw new Error("Script ne JSON nahi diya (login/permission page aaya). Deploy me 'Anyone' access do aur Authorize karo.")}
+  if(!j.ok)throw new Error(j.error==="bad key"?"KEY match nahi hui. Code.gs ki KEY aur app ki Script key bilkul same rakho. KEY badli ho to Deploy → Manage deployments → New version.":(j.error||"Script error"));
+  return j;
 }
-async function scGet(params){
-  const r=await fetch(CFG.sc+(CFG.sc.includes("?")?"&":"?")+new URLSearchParams({key:CFG.key,...params}));
-  const j=await r.json();if(!j.ok)throw new Error(j.error||"Script error");return j;
-}
+const sc=p=>scCall(CFG.sc,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify({key:CFG.key,...p})});
+const scGet=p=>scCall(CFG.sc+(CFG.sc.includes("?")?"&":"?")+new URLSearchParams({key:CFG.key,...p}));
 async function sha(t){const b=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(t));return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,"0")).join("")}
 function genCode(){const c="ABCDEFGHJKMNPQRSTUVWXYZ23456789",a=crypto.getRandomValues(new Uint8Array(6));return [...a].map(x=>c[x%c.length]).join("")}
 
@@ -438,10 +444,12 @@ async function touchIndex(sid){
   }catch(e){}
 }
 let pumping=false;
+let lastErr="";
 async function updBadge(err){
   let n=0;try{n=(await lall("queue")).length}catch(e){}
-  $("#sync").textContent=!navigator.onLine?"⚠ offline":n?(err?"⚠ ":"⏳ ")+n+" upload baaki":"☁ synced";
+  $("#sync").textContent=!navigator.onLine?"⚠ offline":n?(err?"⚠ ":"⏳ ")+n:"☁ synced";
 }
+$("#sync").onclick=()=>{toast(lastErr?"Upload error: "+lastErr:"Sab sync hai ✓",lastErr?10000:2500);pump()};
 async function pump(){
   if(pumping||!cfgOk()||!ROLE)return;pumping=true;let err=false;
   try{
@@ -456,10 +464,10 @@ async function pump(){
         if(!c){await ldel("queue",it.pid);continue}
         const r=await sc({action:"upload",sid:it.sid,school:it.sname,name:it.pid+".jpg",data:c.url.split(",")[1]});
         await dbPutR(`schools/${it.sid}/acts/${it.aid}/ph/${it.st}/${it.pid}`,{d:r.id,t:it.t,w:it.w,h:it.h});
-        await ldel("queue",it.pid);
+        await ldel("queue",it.pid);lastErr="";
         if(S&&S.id===it.sid){const a=acts.find(x=>x.id===it.aid),ph=a&&a.p.flat().find(x=>x.id===it.pid);if(ph){ph.pending=false;ph.d=r.id;const s=a.p.findIndex(l=>l.includes(ph));paintZone(a,s)}}
         touchIndex(it.sid);
-      }catch(e){err=true;break}
+      }catch(e){err=true;lastErr=e.message||String(e);break}
     }
   }finally{pumping=false;updBadge(err)}
 }
@@ -539,26 +547,32 @@ async function applyActs(d){
   acts.forEach(a=>a.p.forEach(l=>l.sort((x,y)=>x.t-y.t)));
 }
 async function openSchool(sid){
-  let d;
-  try{d=await dbGetR("schools/"+sid);if(d)await lput("kv","school:"+sid,d)}
-  catch(e){d=await lget("kv","school:"+sid);if(!d)throw e;toast("Offline: pichli saved list dikh rahi hai.")}
+  let d,cached=null;try{cached=await lget("kv","school:"+sid)}catch(e){}
+  try{
+    const v=await dbGetR(`schools/${sid}/ver`);
+    if(v!=null&&cached&&cached.ver===v)d=cached;
+    else{d=await dbGetR("schools/"+sid);if(d){if(d.ver==null){d.ver=Date.now();await fetch(fbu(`schools/${sid}/ver`),{method:"PUT",body:String(d.ver)})}await lput("kv","school:"+sid,d)}}
+  }catch(e){d=cached;if(!d)throw e;toast("Offline: pichli saved list dikh rahi hai.")}
   if(!d)throw new Error("School nahi mila");
-  S={id:sid,...DEFS};Object.keys(DEFS).forEach(k=>{if(d[k]!=null)S[k]=d[k]});
+  S={id:sid,...DEFS,ver:d.ver||0};Object.keys(DEFS).forEach(k=>{if(d[k]!=null)S[k]=d[k]});
   await applyActs(d);lastSig=JSON.stringify(d.acts||{});
 }
 async function refresh(){
   if(!S||!ROLE||document.hidden||!cfgOk())return;
   try{
+    const v=await dbGetR(`schools/${S.id}/ver`);
+    if(v!=null&&v===S.ver)return;
     const d=await dbGetR("schools/"+S.id);
     if(!d){if(ROLE==="tl"){toast("Ye school hata diya gaya hai.");logout()}return}
-    await lput("kv","school:"+S.id,d);
+    if(d.ver==null){d.ver=Date.now();await fetch(fbu(`schools/${S.id}/ver`),{method:"PUT",body:String(d.ver)})}
+    S.ver=d.ver;await lput("kv","school:"+S.id,d);
     const sig=JSON.stringify(d.acts||{}),editing=cur==="setup"&&$("#v-setup").contains(document.activeElement);
     if(sig!==lastSig&&!editing){lastSig=sig;await applyActs(d);if(cur==="photos")renderPhotos();if(cur==="setup")renderSetupActs()}
     if(!editing)Object.keys(DEFS).forEach(k=>{if(d[k]!=null&&k!=="code")S[k]=d[k]});
   }catch(e){}
 }
-async function syncNow(){closeMenu();await pump();await refresh();if(cur==="dash")loadDash();toast("Sync ho gaya ✓")}
-setInterval(refresh,25000);setInterval(pump,30000);
+async function syncNow(){closeMenu();await pump();await refresh();if(cur==="dash")loadDash(true);toast("Sync ho gaya ✓")}
+setInterval(refresh,40000);setInterval(pump,30000);
 addEventListener("online",()=>{pump();updBadge()});addEventListener("offline",updBadge);
 
 /* ================= navigation + side menu ================= */
@@ -622,9 +636,12 @@ function joinLink(){return location.origin+location.pathname+"#join="+btoa(JSON.
 
 /* ================= admin: dashboard + new school ================= */
 let IDX={};
-async function loadDash(){
-  const box=$("#cards");box.textContent="Loading…";
-  try{IDX=await dbGetR("index")||{};drawCards()}catch(e){box.textContent="Load nahi hua: "+e.message}
+let IDXT=0;
+async function loadDash(force){
+  const box=$("#cards");
+  if(!force&&Date.now()-IDXT<60000&&Object.keys(IDX).length){drawCards();return}
+  box.textContent="Loading…";
+  try{IDX=await dbGetR("index")||{};IDXT=Date.now();drawCards()}catch(e){box.textContent="Load nahi hua: "+e.message}
 }
 function drawCards(){
   const box=$("#cards"),q=$("#q").value.trim().toLowerCase();box.innerHTML="";
@@ -654,7 +671,7 @@ $("#n_go").onclick=async()=>{
     if(from){const d=await dbGetR("schools/"+from);names=Object.values(d.acts||{}).sort((a,b)=>(a.ord||0)-(b.ord||0)).map(a=>a.name);["ttl","reg","sub","bar","pf","yr"].forEach(k=>{if(d[k]!=null)extra[k]=d[k]})}
     else names=$$("#n_list input:checked").map(i=>i.value);
     const sid="s"+uid(),code=genCode(),ao={};names.forEach((n,i)=>{ao["a_"+uid()+i]={name:n,ord:(i+1)*10}});
-    await dbPutR("schools/"+sid,{...DEFS,...extra,name,fc,code,created:Date.now(),acts:ao});
+    IDXT=0;await dbPutR("schools/"+sid,{...DEFS,...extra,name,fc,code,created:Date.now(),ver:Date.now(),acts:ao});
     await dbPutR("codes/"+code,sid);await dbPutR("index/"+sid,{name,fc,n:0,u:Date.now()});
     await openSchool(sid);go("setup");toast("School ban gaya ✓ Ab team leader ko link share karo.");
   }catch(e){toast("Nahi bana: "+e.message)}finally{btn.disabled=false}
@@ -719,7 +736,7 @@ async function delAct(a){
 async function deleteSchool(){
   const id=S.id,code=S.code;
   try{
-    await dbDelR("schools/"+id);await dbDelR("index/"+id);if(code)await dbDelR("codes/"+code);
+    IDXT=0;await dbDelR("schools/"+id);await dbDelR("index/"+id);if(code)await dbDelR("codes/"+code);
     sc({action:"deleteSchool",sid:id}).catch(()=>{});
     for(const q of (await lall("queue")))if(q.sid===id)await ldel("queue",q.pid);
     S=null;acts=[];toast("School delete ho gaya.");go("dash");
@@ -749,12 +766,19 @@ async function dl(kind,btn){
 $("#dl").onclick=()=>dl("docx",$("#dl"));$("#dlp").onclick=()=>dl("pdf",$("#dlp"));
 
 /* ================= admin: logos + system ================= */
-async function loadLogos(){try{const L=await dbGetR("config/logos");logoL=(L&&L.l)||{...DEF_L};logoR=(L&&L.r)||{...DEF_R}}catch(e){}}
+async function loadLogos(){
+  try{
+    const v=await dbGetR("config/logosVer");
+    if(v==null){logoL={...DEF_L};logoR={...DEF_R};return}
+    const c=await lget("kv","logos");if(c&&c.v===v){logoL=c.l;logoR=c.r;return}
+    const L=await dbGetR("config/logos");logoL=(L&&L.l)||{...DEF_L};logoR=(L&&L.r)||{...DEF_R};await lput("kv","logos",{v,l:logoL,r:logoR});
+  }catch(e){const c=await lget("kv","logos").catch(()=>null);if(c){logoL=c.l;logoR=c.r}}
+}
 function renderLogos(){$("#lgl").src=logoL.url;$("#lgr").src=logoR.url}
 function logoBtn(btn,side){btn.onclick=()=>{const i=document.createElement("input");i.type="file";i.accept="image/*";
-  i.onchange=async()=>{const f=i.files[0];if(!f)return;try{const g=await shrink(f,500,true);if(side==="L")logoL=g;else logoR=g;await dbPutR("config/logos",{l:logoL,r:logoR});renderLogos();toast("Logo badal gaya ✓")}catch(e){toast("Logo save nahi hua: "+e.message)}};i.click()}}
+  i.onchange=async()=>{const f=i.files[0];if(!f)return;try{const g=await shrink(f,500,true);if(side==="L")logoL=g;else logoR=g;await dbPutR("config/logos",{l:logoL,r:logoR});const v=Date.now();await dbPutR("config/logosVer",v);await lput("kv","logos",{v,l:logoL,r:logoR});renderLogos();toast("Logo badal gaya ✓")}catch(e){toast("Logo save nahi hua: "+e.message)}};i.click()}}
 logoBtn($("#lgL"),"L");logoBtn($("#lgR"),"R");
-$("#lgReset").onclick=async()=>{logoL={...DEF_L};logoR={...DEF_R};try{await dbDelR("config/logos")}catch(e){}renderLogos();toast("Original logos wapas aa gaye.")};
+$("#lgReset").onclick=async()=>{logoL={...DEF_L};logoR={...DEF_R};try{await dbDelR("config/logos");await dbDelR("config/logosVer");await ldel("kv","logos")}catch(e){}renderLogos();toast("Original logos wapas aa gaye.")};
 async function renderSys(){
   const v=$("#v-sys");v.innerHTML="";
   const fbI=el("input",{type:"url",value:CFG.fb}),scI=el("input",{type:"url",value:CFG.sc}),kI=el("input",{type:"text",value:CFG.key}),res=el("p",{className:"note"});
@@ -763,7 +787,9 @@ async function renderSys(){
     try{await dbGetR("config");t+="✅ Firebase OK\n"}catch(e){t+="❌ Firebase: "+e.message+"\n"}
     try{await scGet({action:"ping"});t+="✅ Google Drive script OK"}catch(e){t+="❌ Script: "+e.message}
     res.style.whiteSpace="pre-line";res.textContent=t};
-  v.append(el("div",{className:"card"},el("h2",{textContent:"Connection"}),el("label",{},"Firebase Database URL",fbI),el("label",{},"Apps Script Web App URL",scI),el("label",{},"Script key",kI),save,res));
+  const tu=el("button",{className:"ghost",type:"button",textContent:"Test Drive upload"});
+  tu.onclick=async()=>{res.style.whiteSpace="pre-line";res.textContent="Upload test chal raha hai…";try{const r=await sc({action:"upload",sid:"test",school:"TEST",name:"test.jpg",data:"AAAA"});await sc({action:"delete",id:r.id});res.textContent="✅ Google Drive upload + delete OK"}catch(e){res.textContent="❌ "+e.message}};
+  v.append(el("div",{className:"card"},el("h2",{textContent:"Connection"}),el("label",{},"Firebase Database URL",fbI),el("label",{},"Apps Script Web App URL",scI),el("label",{},"Script key",kI),el("div",{className:"rowb"},save,tu),res,el("p",{className:"note",textContent:lastErr?"Last upload error: "+lastErr:""})));
   const np=el("input",{type:"password",placeholder:"Naya PIN (kam se kam 4 digit)",inputMode:"numeric"}),sp=el("button",{className:"go",type:"button",textContent:"PIN badlo"});
   sp.onclick=async()=>{if(np.value.trim().length<4)return toast("PIN kam se kam 4 digit ka ho.");try{const s=uid();await dbPutR("config/admin",{s,h:await sha(s+np.value.trim())});np.value="";toast("PIN badal gaya ✓")}catch(e){toast("PIN nahi badla: "+e.message)}};
   v.append(el("div",{className:"card"},el("h2",{textContent:"Admin PIN"}),el("label",{},"Naya PIN",np),sp));
