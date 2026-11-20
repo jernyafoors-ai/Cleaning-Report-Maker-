@@ -210,7 +210,7 @@ const dbGetR=p=>fb("GET",p),dbPutR=(p,v)=>fb("PUT",p,v),dbPatchR=(p,v)=>fb("PATC
 async function scCall(url,opt){
   let r;try{r=await fetch(url,opt)}catch(e){throw new Error("Script tak pahunch nahi paya. Script URL (/exec wala) aur Deploy me 'Who has access = Anyone' check karo.")}
   const t=await r.text();let j;try{j=JSON.parse(t)}catch(e){throw new Error("Script ne JSON nahi diya (login/permission page aaya). Deploy me 'Anyone' access do aur Authorize karo.")}
-  if(!j.ok)throw new Error(j.error==="bad key"?"KEY match nahi hui. Code.gs ki KEY aur app ki Script key bilkul same rakho. KEY badli ho to Deploy → Manage deployments → New version.":(j.error||"Script error"));
+  if(!j.ok)throw new Error(j.error&&j.error===CFG.key?"Script me 'bad key' wale message ki jagah KEY likh di gayi hai. Code.gs me sirf const KEY = \"...\" wali line me KEY daalo, error: \"bad key\" wapas likho, phir New version deploy karo.":j.error==="bad key"?"KEY match nahi hui. Code.gs ki KEY aur app ki Script key bilkul same rakho. KEY badli ho to Deploy → Manage deployments → New version.":(j.error||"Script error"));
   return j;
 }
 const sc=p=>scCall(CFG.sc,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify({key:CFG.key,...p})});
