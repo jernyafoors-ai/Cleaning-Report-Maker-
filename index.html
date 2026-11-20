@@ -449,7 +449,7 @@ async function updBadge(err){
   let n=0;try{n=(await lall("queue")).length}catch(e){}
   $("#sync").textContent=!navigator.onLine?"⚠ offline":n?(err?"⚠ ":"⏳ ")+n:"☁ synced";
 }
-$("#sync").onclick=()=>{toast(lastErr?"Upload error: "+lastErr:"Sab sync hai ✓",lastErr?10000:2500);pump()};
+$("#sync").onclick=async()=>{toast("Retry ho raha hai…",8000);await pump();toast(lastErr?"Upload error: "+lastErr:"Sab sync ho gaya ✓",lastErr?10000:2500)};
 async function pump(){
   if(pumping||!cfgOk()||!ROLE)return;pumping=true;let err=false;
   try{
@@ -786,7 +786,7 @@ async function renderSys(){
   save.onclick=async()=>{CFG={fb:fbI.value.trim(),sc:scI.value.trim(),key:kI.value.trim()};LS.set("cfg",CFG);res.textContent="Testing…";let t="";
     try{await dbGetR("config");t+="✅ Firebase OK\n"}catch(e){t+="❌ Firebase: "+e.message+"\n"}
     try{await scGet({action:"ping"});t+="✅ Google Drive script OK"}catch(e){t+="❌ Script: "+e.message}
-    res.style.whiteSpace="pre-line";res.textContent=t};
+    res.style.whiteSpace="pre-line";res.textContent=t;if(t.indexOf("❌")<0)pump()};
   const tu=el("button",{className:"ghost",type:"button",textContent:"Test Drive upload"});
   tu.onclick=async()=>{res.style.whiteSpace="pre-line";res.textContent="Upload test chal raha hai…";try{const r=await sc({action:"upload",sid:"test",school:"TEST",name:"test.jpg",data:"AAAA"});await sc({action:"delete",id:r.id});res.textContent="✅ Google Drive upload + delete OK"}catch(e){res.textContent="❌ "+e.message}};
   v.append(el("div",{className:"card"},el("h2",{textContent:"Connection"}),el("label",{},"Firebase Database URL",fbI),el("label",{},"Apps Script Web App URL",scI),el("label",{},"Script key",kI),el("div",{className:"rowb"},save,tu),res,el("p",{className:"note",textContent:lastErr?"Last upload error: "+lastErr:""})));
